@@ -2,6 +2,8 @@
 
 This is a simple To-Do List application built with React and Vite. It allows users to add and delete tasks, with the tasks being stored in the browser's local storage.
 
+![To-Do List Application](./app-picture.png)
+
 ## Features
 
 - Add new tasks
