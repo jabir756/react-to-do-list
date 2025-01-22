@@ -8,19 +8,41 @@ function App() {
     if (task.trim() === '') {
       document.querySelector('#error').textContent = 'Please enter a task'
       return
-    }else{
-    const tasksCount = window.localStorage.length
-    window.localStorage.setItem(`task${tasksCount + 1}`, task)
-    document.querySelector('#taskInput').value = ''
-    window.location.reload()
+    }
+    else if (task.length > 100) {
+      document.querySelector('#error').textContent = 'Please enter a task with less than 100 characters'
+    } 
+    else {
+      const tasksCount = window.localStorage.length
+      const taskEditStart = task.trimStart()
+      const taskEditEnd = taskEditStart.trimEnd()
+      window.localStorage.setItem(tasksCount + 1, taskEditEnd);
+      document.querySelector('#taskInput').value = ''
+      window.location.reload()
     }
   }
- 
+
   const deleteTask = (key) => () => {
     window.localStorage.removeItem(key)
     window.location.reload()
   }
-  
+
+  const endTask = (key) => () => {
+    const task = window.localStorage.getItem(key)
+    if (task.includes('✅')) return
+    window.localStorage.setItem(key, `${task}✅`);
+    window.location.reload()
+  }
+
+    const notEnd = (key) => () => {
+      const task = window.localStorage.getItem(key);
+      if (task.includes("✅")){
+        const newTaskState = task.replace("✅", "");
+        window.localStorage.setItem(key, `${newTaskState}`);
+      }
+      window.location.reload();
+    };
+
   return (
     <>
       <div>
@@ -56,13 +78,29 @@ function App() {
                   className="flex justify-between items-center border-b border-gray-300 p-2"
                   key={key}
                 >
-                  <p className='w-100 break-words'>{window.localStorage.getItem(key)}</p>
-                  <button
-                    className="bg-red-500 text-white p-1 m-1 rounded-lg hover:cursor-pointer"
-                    onClick={deleteTask(key)}
-                  >
-                    delete
-                  </button>
+                  <p id={key} className="w-30 break-words flex-1 m-1">
+                    {window.localStorage.getItem(key)}
+                  </p>
+                  <div className="flex flex-col border-l-1 sm:flex-row">
+                    <button
+                      className="bg-red-500 text-white p-1 m-1 rounded-lg hover:cursor-pointer"
+                      onClick={deleteTask(key)}
+                    >
+                      delete
+                    </button>
+                    <button
+                      className="bg-green-500 text-white p-1 m-1 rounded-lg hover:cursor-pointer"
+                      onClick={endTask(key)}
+                    >
+                      end
+                    </button>
+                    <button
+                      className="bg-gray-500 text-white p-1 m-1 rounded-lg hover:cursor-pointer"
+                      onClick={notEnd(key)}
+                    >
+                      not end
+                    </button>
+                  </div>
                 </li>
               ))}
             </ul>
