@@ -106,7 +106,7 @@ function App() {
             </ul>
           </div>
           <div>
-            <h1>Made by jabir756</h1>
+            <h1>Made by jabir-git</h1>
           </div>
         </div>
       </div>
